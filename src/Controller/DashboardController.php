@@ -36,7 +36,12 @@ class DashboardController extends AbstractController
             'motos' => $motoRepository->getStatistiques($siteFilter),
             'motards' => $motardRepository->getStatistiques($siteFilter),
             'plaques' => $plaqueRepository->getStatistiques(),
-            'paiements' => $paiementRepository->getStatistiques($siteFilter),
+            // Modification: On compte les dossiers au lieu des paiements individuels
+            'paiements' => [
+                'total' => $dossierRepository->count([]), // Total dossiers
+                'montant' => $dossierRepository->getMontantTotal($siteFilter), // Montant total des dossiers
+                'today' => $dossierRepository->countToday($siteFilter) // Dossiers aujourd'hui
+            ],
             'dossiers_attente' => $dossierRepository->count(['status' => \App\Entity\Dossier::STATUS_EN_ATTENTE]),
             'plaques_dispo' => $plaqueRepository->count(['statut' => 'DISPONIBLE']),
         ];
@@ -44,7 +49,7 @@ class DashboardController extends AbstractController
         // Données pour les graphiques
         $chartData = [];
         
-        // Paiements par taxe (pour camembert)
+        // Paiements par taxe (pour camembert) - On garde ça car c'est utile pour l'analyse
         $paiementsByTaxe = $paiementRepository->getStatistiquesByTaxe($siteFilter);
         $chartData['paiementsByTaxe'] = $paiementsByTaxe;
 
@@ -61,14 +66,14 @@ class DashboardController extends AbstractController
         // Dernières affectations
         $recentAffectations = $affectationRepository->getRecentAffectations($siteFilter, 5);
 
-        // Derniers paiements
-        $recentPaiements = $paiementRepository->findBy([], ['createdAt' => 'DESC'], 5);
+        // Derniers dossiers (au lieu de paiements)
+        $recentDossiers = $dossierRepository->findBy([], ['createdAt' => 'DESC'], 5);
 
         return $this->render('dashboard/index.html.twig', [
             'stats' => $stats,
             'chartData' => $chartData,
             'recentAffectations' => $recentAffectations,
-            'recentPaiements' => $recentPaiements,
+            'recentDossiers' => $recentDossiers, // Renamed variable
             'isAdmin' => $isAdmin,
         ]);
     }

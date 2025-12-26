@@ -184,9 +184,9 @@
                     <div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
                         <i class="fas fa-hourglass-half text-yellow-600"></i>
                     </div>
-                    <span class="text-gray-700">Paiements en attente</span>
+                    <span class="text-gray-700">Dossiers en attente</span>
                 </div>
-                <span class="text-2xl font-bold text-yellow-600">{{ stats.paiements.enAttente|default(0) }}</span>
+                <span class="text-2xl font-bold text-yellow-600">{{ stats.dossiers_attente|default(0) }}</span>
             </div>
             <div class="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
                 <div class="flex items-center">
@@ -211,9 +211,9 @@
                     <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
                         <i class="fas fa-coins text-green-600"></i>
                     </div>
-                    <span class="text-gray-700">Montant total perçu</span>
+                    <span class="text-gray-700">Montant total (dossiers)</span>
                 </div>
-                <span class="text-xl font-bold text-green-600">{{ stats.paiements.montantTotal|default(0)|number_format(0, ',', ' ') }} FC</span>
+                <span class="text-xl font-bold text-green-600">{{ stats.paiements.montant|default(0)|number_format(0, ',', ' ') }} FC</span>
             </div>
         </div>
     </div>
@@ -258,39 +258,41 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
         <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-900">
-                <i class="fas fa-receipt text-gray-400 mr-2"></i>Derniers paiements
+                <i class="fas fa-folder-open text-gray-400 mr-2"></i>Derniers dossiers
             </h3>
             <a href="{{ path('encoder_paiement_index') }}" class="text-sm text-primary-600 hover:text-primary-700">Voir tout →</a>
         </div>
         <div class="p-6">
-            {% if recentPaiements|length > 0 %}
+            {% if recentDossiers|length > 0 %}
             <div class="space-y-4">
-                {% for paiement in recentPaiements %}
+                {% for dossier in recentDossiers %}
                 <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
                     <div class="flex items-center gap-4">
-                        <div class="h-10 w-10 rounded-full {% if paiement.status == 'VALIDE' %}bg-green-100{% else %}bg-yellow-100{% endif %} flex items-center justify-center">
-                            <i class="fas fa-money-bill {% if paiement.status == 'VALIDE' %}text-green-600{% else %}text-yellow-600{% endif %}"></i>
+                        <div class="h-10 w-10 rounded-full {% if dossier.status == 'VALIDE' %}bg-green-100{% elseif dossier.status == 'REJETE' %}bg-red-100{% else %}bg-yellow-100{% endif %} flex items-center justify-center">
+                            <i class="fas fa-folder {% if dossier.status == 'VALIDE' %}text-green-600{% elseif dossier.status == 'REJETE' %}text-red-600{% else %}text-yellow-600{% endif %}"></i>
                         </div>
                         <div>
-                            <p class="font-medium text-gray-900">{{ paiement.montant|number_format(0, ',', ' ') }} FC</p>
-                            <p class="text-sm text-gray-500">{{ paiement.taxe|default('Taxe') }}</p>
+                            <p class="font-medium text-gray-900">{{ dossier.reference }}</p>
+                            <p class="text-sm text-gray-500">{{ dossier.moto|default('Moto N/A') }} - {{ dossier.montantTotal|number_format(0, ',', ' ') }} FC</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        {% if paiement.status == 'VALIDE' %}
+                        {% if dossier.status == 'VALIDE' %}
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Validé</span>
+                        {% elseif dossier.status == 'REJETE' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Rejeté</span>
                         {% else %}
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">En attente</span>
                         {% endif %}
-                        <p class="text-xs text-gray-400 mt-1">{{ paiement.createdAt|date('d/m/Y') }}</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ dossier.createdAt|date('d/m/Y') }}</p>
                     </div>
                 </div>
                 {% endfor %}
             </div>
             {% else %}
             <div class="text-center py-8 text-gray-500">
-                <i class="fas fa-receipt text-4xl mb-3 text-gray-300"></i>
-                <p>Aucun paiement récent</p>
+                <i class="fas fa-folder-open text-4xl mb-3 text-gray-300"></i>
+                <p>Aucun dossier récent</p>
             </div>
             {% endif %}
         </div>

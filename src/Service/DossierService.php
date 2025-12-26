@@ -50,7 +50,7 @@ class DossierService
         $dossier->valider($validator);
         $this->em->flush();
         
-        $this->auditService->logUpdate($dossier, $validator, 'Validation du dossier');
+        $this->auditService->logValidation($dossier, $validator);
         
         return $dossier;
     }
@@ -60,7 +60,7 @@ class DossierService
         $dossier->rejeter($validator, $motif);
         $this->em->flush();
         
-        $this->auditService->logUpdate($dossier, $validator, 'Rejet du dossier: ' . $motif);
+        $this->auditService->logUpdate($dossier, $validator, ['motif' => $motif]);
         
         return $dossier;
     }

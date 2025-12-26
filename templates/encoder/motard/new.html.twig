@@ -227,6 +227,68 @@ document.addEventListener('DOMContentLoaded', function() {
     if (index === 0) {
         addButton.click();
     }
+
+    // ============ STEPPER NAVIGATION ============
+    const stepperLinks = document.querySelectorAll('nav[aria-label="Progression"] a');
+    const sections = document.querySelectorAll('section[id]');
+    
+    // Function to update stepper active state
+    function updateStepper(activeId) {
+        stepperLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            const isActive = href === '#' + activeId;
+            
+            if (isActive) {
+                // Active state
+                link.className = 'flex items-center w-full px-4 py-3 text-sm font-medium text-white bg-slate-800 rounded-lg shadow-sm transition-all';
+                const badge = link.querySelector('span');
+                if (badge) {
+                    badge.className = 'flex items-center justify-center w-6 h-6 mr-3 text-xs font-bold text-slate-800 bg-white rounded-full';
+                }
+            } else {
+                // Inactive state
+                link.className = 'flex items-center w-full px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-all';
+                const badge = link.querySelector('span');
+                if (badge) {
+                    badge.className = 'flex items-center justify-center w-6 h-6 mr-3 text-xs font-bold text-gray-400 border border-gray-300 rounded-full';
+                }
+            }
+        });
+    }
+
+    // IntersectionObserver to detect which section is in view
+    const observerOptions = {
+        root: null,
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                updateStepper(entry.target.id);
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Handle click on stepper links
+    stepperLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Use setTimeout to update stepper after scroll starts
+                setTimeout(() => updateStepper(targetId), 100);
+            }
+        });
+    });
 });
 </script>
 {% endblock %}

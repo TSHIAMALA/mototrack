@@ -57,4 +57,34 @@ class DossierRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getMontantTotal($site = null): float
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('SUM(d.montantTotal)');
+
+        if ($site) {
+            $qb->join('d.createdBy', 'u')
+               ->where('u.site = :site')
+               ->setParameter('site', $site);
+        }
+
+        return (float) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countToday($site = null): int
+    {
+        $qb = $this->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->where('d.createdAt >= :today')
+            ->setParameter('today', new \DateTime('today'));
+
+        if ($site) {
+            $qb->join('d.createdBy', 'u')
+               ->andWhere('u.site = :site')
+               ->setParameter('site', $site);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
 }
