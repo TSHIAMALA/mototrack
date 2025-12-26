@@ -1,0 +1,261 @@
+{% extends 'base.html.twig' %}
+{% block title %}Validation Dossier {{ dossier.reference }} - MotoTrack{% endblock %}
+{% block page_title %}Validation du Dossier{% endblock %}
+
+{% block body %}
+<div class="space-y-6">
+    <!-- En-tête -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-primary-200 text-sm">Référence du dossier</p>
+                <h2 class="text-2xl font-bold">{{ dossier.reference }}</h2>
+                <p class="text-primary-200 mt-1">Créé le {{ dossier.createdAt|date('d/m/Y à H:i') }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-primary-200 text-sm">Montant total</p>
+                <p class="text-3xl font-bold">{{ dossier.montantTotal|number_format(0, ',', ' ') }} FC</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Informations du motard -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-blue-50">
+                <h4 class="font-semibold text-blue-900"><i class="fas fa-user mr-2"></i>Informations du Motard</h4>
+            </div>
+            <div class="p-6">
+                {% set motard = dossier.motard %}
+                {% if motard %}
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span class="text-2xl font-bold text-blue-600">{{ motard.nomComplet|first|upper }}</span>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-semibold text-gray-900">{{ motard.nomComplet }}</h5>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {% if motard.type == 'PHYSIQUE' %}bg-blue-100 text-blue-800{% else %}bg-purple-100 text-purple-800{% endif %}">
+                            {{ motard.type == 'PHYSIQUE' ? 'Personne physique' : 'Personne morale' }}
+                        </span>
+                    </div>
+                </div>
+                <dl class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-id-card text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Identification</dt>
+                            <dd class="font-medium text-gray-900">{{ motard.identification|default('Non renseigné') }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-phone text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Téléphone</dt>
+                            <dd class="font-medium text-gray-900">{{ motard.telephone|default('Non renseigné') }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-envelope text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Email</dt>
+                            <dd class="font-medium text-gray-900">{{ motard.email|default('Non renseigné') }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-map-marker-alt text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Adresse</dt>
+                            <dd class="font-medium text-gray-900">{{ motard.activeAdresse|default('Non renseignée') }}</dd>
+                        </div>
+                    </div>
+                </dl>
+                {% else %}
+                <p class="text-gray-500 text-center py-4">Informations non disponibles</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informations de la moto -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 bg-green-50">
+                <h4 class="font-semibold text-green-900"><i class="fas fa-motorcycle mr-2"></i>Informations de la Moto</h4>
+            </div>
+            <div class="p-6">
+                {% set moto = dossier.moto %}
+                {% if moto %}
+                <dl class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-tag text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Marque</dt>
+                            <dd class="font-medium text-gray-900">{{ moto.marque }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-cog text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Modèle</dt>
+                            <dd class="font-medium text-gray-900">{{ moto.modele|default('Non renseigné') }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-barcode text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Numéro de châssis</dt>
+                            <dd class="font-mono font-medium text-gray-900">{{ moto.numeroChassis }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-palette text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Couleur</dt>
+                            <dd class="font-medium text-gray-900">{{ moto.couleur|default('Non renseignée') }}</dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-id-card text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Plaque</dt>
+                            <dd>
+                                {% if moto.plaque %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    {{ moto.plaque.numero }}
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                    Non attribuée
+                                </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <i class="fas fa-map-pin text-gray-400 w-5"></i>
+                        <div>
+                            <dt class="text-xs text-gray-500">Site d'enregistrement</dt>
+                            <dd class="font-medium text-gray-900">{{ moto.site.nom|default('Non renseigné') }}</dd>
+                        </div>
+                    </div>
+                </dl>
+                {% else %}
+                <p class="text-gray-500 text-center py-4">Informations non disponibles</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Détail des paiements -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 bg-purple-50">
+            <h4 class="font-semibold text-purple-900"><i class="fas fa-receipt mr-2"></i>Détail des Paiements</h4>
+        </div>
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b-2 border-gray-200">
+                            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700">Taxe</th>
+                            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700">Code</th>
+                            <th class="text-right py-3 px-4 text-sm font-semibold text-gray-700">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paiement in dossier.paiements %}
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="py-4 px-4">
+                                <span class="font-medium text-gray-900">{{ paiement.taxe.libelle }}</span>
+                            </td>
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-gray-100 text-gray-600">
+                                    {{ paiement.taxe.code }}
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 text-right font-semibold text-gray-900">
+                                {{ paiement.montant|number_format(0, ',', ' ') }} FC
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-primary-50">
+                            <td colspan="2" class="py-4 px-4 font-bold text-primary-900">TOTAL À PAYER</td>
+                            <td class="py-4 px-4 text-right text-2xl font-bold text-primary-600">
+                                {{ dossier.montantTotal|number_format(0, ',', ' ') }} FC
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+            <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Mode de paiement:</span>
+                    <span class="font-semibold text-gray-900">
+                        {% if dossier.modePaiement == 'CASH' %}
+                            <i class="fas fa-money-bill text-green-500 mr-1"></i>Espèces
+                        {% elseif dossier.modePaiement == 'MOBILE_MONEY' %}
+                            <i class="fas fa-mobile-alt text-blue-500 mr-1"></i>Mobile Money
+                        {% else %}
+                            <i class="fas fa-university text-purple-500 mr-1"></i>Virement bancaire
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions de validation -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h4 class="font-semibold text-gray-900 mb-4"><i class="fas fa-gavel mr-2"></i>Actions</h4>
+        
+        <div class="flex flex-col sm:flex-row gap-4">
+            <form action="{{ path('validator_dossier_valider', {id: dossier.id}) }}" method="post" class="flex-1">
+                <input type="hidden" name="_token" value="{{ csrf_token('valider' ~ dossier.id) }}">
+                <button type="submit" onclick="return confirm('Confirmer la validation de ce dossier ?')"
+                        class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors shadow-lg shadow-green-200">
+                    <i class="fas fa-check-circle mr-2"></i>Valider le dossier
+                </button>
+            </form>
+            
+            <button type="button" onclick="document.getElementById('rejectModal').classList.remove('hidden')"
+                    class="flex-1 inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-200">
+                <i class="fas fa-times-circle mr-2"></i>Rejeter le dossier
+            </button>
+        </div>
+        
+        <div class="mt-4">
+            <a href="{{ path('validator_paiements') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900">
+                <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de rejet -->
+<div id="rejectModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Rejeter le dossier</h3>
+        </div>
+        <form action="{{ path('validator_dossier_rejeter', {id: dossier.id}) }}" method="post">
+            <input type="hidden" name="_token" value="{{ csrf_token('rejeter' ~ dossier.id) }}">
+            <div class="p-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Motif du rejet</label>
+                <textarea name="motif" rows="4" required
+                          class="w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 border px-4 py-3"
+                          placeholder="Expliquez la raison du rejet..."></textarea>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex justify-end gap-3">
+                <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                    Annuler
+                </button>
+                <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
+                    Confirmer le rejet
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

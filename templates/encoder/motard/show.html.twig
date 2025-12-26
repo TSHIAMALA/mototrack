@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block title %}Détails Motard - MotoTrack{% endblock %}
+{% block page_title %}Détails du Motard{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-user text-gray-400 mr-2"></i>{{ motard.nomComplet|default(motard.nom|default('Motard')) }}
+            </h3>
+            <a href="{{ path('encoder_motard_edit', {id: motard.id}) }}" class="text-amber-600 hover:text-amber-700">
+                <i class="fas fa-edit mr-1"></i>Modifier
+            </a>
+        </div>
+        <div class="p-6">
+            <dl class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <dt class="text-sm font-medium text-gray-500">Nom complet</dt>
+                    <dd class="mt-1 text-lg font-semibold text-gray-900">{{ motard.nomComplet|default('-') }}</dd>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <dt class="text-sm font-medium text-gray-500">Téléphone</dt>
+                    <dd class="mt-1 text-lg font-semibold text-gray-900">{{ motard.telephone|default('-') }}</dd>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <dt class="text-sm font-medium text-gray-500">Email</dt>
+                    <dd class="mt-1 text-lg font-semibold text-gray-900">{{ motard.email|default('-') }}</dd>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <dt class="text-sm font-medium text-gray-500">Identification</dt>
+                    <dd class="mt-1 text-lg font-semibold text-gray-900">{{ motard.identification|default('-') }}</dd>
+                </div>
+            </dl>
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <a href="{{ path('encoder_motard_index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

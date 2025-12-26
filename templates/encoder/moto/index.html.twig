@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+{% block title %}Motos - MotoTrack{% endblock %}
+{% block page_title %}Gestion des Motos{% endblock %}
+
+{% block body %}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h3 class="text-lg font-semibold text-gray-900">
+            <i class="fas fa-motorcycle text-gray-400 mr-2"></i>Liste des Motos ({{ motos|length }})
+        </h3>
+        <a href="{{ path('encoder_moto_new') }}" class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+            <i class="fas fa-plus mr-2"></i>Nouvelle Moto
+        </a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N° Châssis</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Motard</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Marque</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Couleur</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plaque</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Site</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for moto in motos %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="font-mono font-medium text-gray-900">{{ moto.numeroChassis }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <a href="{{ path('encoder_motard_show', {id: moto.motard.id}) }}" class="text-primary-600 hover:text-primary-800">
+                            {{ moto.motard.nomComplet|default('-') }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                        {{ moto.marque.nom|default('-') }}
+                        {% if moto.modele %}<span class="text-gray-400"> / {{ moto.modele }}</span>{% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ moto.couleur|default('-') }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% if moto.plaque %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            {{ moto.plaque.numero }}
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            Sans plaque
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ moto.site.nom|default('-') }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right">
+                        <a href="{{ path('encoder_moto_show', {id: moto.id}) }}" class="text-primary-600 hover:text-primary-800 mr-3" title="Voir">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="{{ path('encoder_moto_edit', {id: moto.id}) }}" class="text-amber-600 hover:text-amber-800" title="Modifier">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                        <i class="fas fa-motorcycle text-4xl mb-3 text-gray-300"></i>
+                        <p>Aucune moto enregistrée</p>
+                        <a href="{{ path('encoder_moto_new') }}" class="mt-3 inline-flex items-center text-primary-600 hover:text-primary-700">
+                            <i class="fas fa-plus mr-1"></i>Ajouter une moto
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

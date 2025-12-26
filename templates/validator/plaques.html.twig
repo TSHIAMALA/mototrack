@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% block title %}Affecter Plaques - MotoTrack{% endblock %}
+{% block page_title %}Affectation des Plaques{% endblock %}
+
+{% block body %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-blue-100 text-sm">Motos sans plaque</p>
+                <p class="text-3xl font-bold mt-1">{{ motos|length }}</p>
+            </div>
+            <i class="fas fa-motorcycle text-3xl text-blue-200"></i>
+        </div>
+    </div>
+    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-green-100 text-sm">Plaques disponibles</p>
+                <p class="text-3xl font-bold mt-1">{{ plaques|length }}</p>
+            </div>
+            <i class="fas fa-id-card text-3xl text-green-200"></i>
+        </div>
+    </div>
+    <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-purple-100 text-sm">Affectations possibles</p>
+                <p class="text-3xl font-bold mt-1">{{ min(motos|length, plaques|length) }}</p>
+            </div>
+            <i class="fas fa-link text-3xl text-purple-200"></i>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Motos en attente d'affectation de plaque</h3>
+    </div>
+    
+    {% if motos|length > 0 and plaques|length > 0 %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">N° Châssis</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Motard</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Marque</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Site</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plaque à affecter</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for moto in motos %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-mono font-medium text-gray-900">{{ moto.numeroChassis }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ moto.motard.nomComplet|default('-') }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ moto.marque.nom|default('-') }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ moto.site.nom|default('-') }}</td>
+                    <td class="px-6 py-4">
+                        <form action="{{ path('validator_plaque_affecter', {id: moto.id}) }}" method="post" class="flex items-center gap-2" id="form-{{ moto.id }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('affecter' ~ moto.id) }}">
+                            <select name="plaque_id" class="block w-48 rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm">
+                                {% for plaque in plaques %}
+                                <option value="{{ plaque.id }}">{{ plaque.numero }}</option>
+                                {% endfor %}
+                            </select>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                                <i class="fas fa-link mr-2"></i>Affecter
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elseif motos|length > 0 and plaques|length == 0 %}
+    <div class="p-12 text-center">
+        <div class="mx-auto h-16 w-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-exclamation-triangle text-2xl text-yellow-600"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Aucune plaque disponible</h3>
+        <p class="text-gray-500">Il y a {{ motos|length }} moto(s) en attente mais aucune plaque n'est disponible.</p>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+        <div class="mx-auto h-16 w-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-check-circle text-2xl text-green-600"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Toutes les motos ont une plaque</h3>
+        <p class="text-gray-500">Aucune moto n'est en attente d'affectation de plaque.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

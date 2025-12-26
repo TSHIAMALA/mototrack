@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+{% block title %}Validation des Dossiers - MotoTrack{% endblock %}
+{% block page_title %}Dossiers en attente de validation{% endblock %}
+
+{% block body %}
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">
+            <i class="fas fa-clipboard-check text-yellow-500 mr-2"></i>Dossiers à valider ({{ dossiers|length }})
+        </h3>
+    </div>
+    
+    {% if dossiers|length > 0 %}
+    <div class="divide-y divide-gray-200">
+        {% for dossier in dossiers %}
+        <div class="p-6 hover:bg-gray-50 transition-colors">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="font-mono text-lg font-semibold text-primary-600">{{ dossier.reference }}</span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <i class="fas fa-clock mr-1"></i>En attente
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500">Motard:</span>
+                            <span class="font-medium text-gray-900 ml-1">{{ dossier.motard.nomComplet|default('-') }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Moto:</span>
+                            <span class="font-medium text-gray-900 ml-1">{{ dossier.moto.numeroChassis|default('-') }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Montant:</span>
+                            <span class="font-bold text-green-600 ml-1">{{ dossier.montantTotal|number_format(0, ',', ' ') }} FC</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 text-xs text-gray-400">
+                        <i class="fas fa-calendar mr-1"></i>Créé le {{ dossier.createdAt|date('d/m/Y à H:i') }}
+                        par {{ dossier.createdBy.nom|default('N/A') }}
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-2 ml-4">
+                    <a href="{{ path('validator_dossier_show', {id: dossier.id}) }}" 
+                       class="inline-flex items-center px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">
+                        <i class="fas fa-eye mr-2"></i>Voir le dossier
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+        <div class="h-16 w-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-check text-3xl text-green-500"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-1">Aucun dossier en attente</h3>
+        <p class="text-gray-500">Tous les dossiers ont été traités.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

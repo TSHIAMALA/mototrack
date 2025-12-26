@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dossier {{ dossier.reference }} - MotoTrack{% endblock %}
+{% block page_title %}Dossier {{ dossier.reference }}{% endblock %}
+
+{% block body %}
+<div class="space-y-6">
+    <!-- En-tête du dossier -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-folder text-primary-500 mr-2"></i>{{ dossier.reference }}
+                </h3>
+                <p class="text-sm text-gray-500">Créé le {{ dossier.createdAt|date('d/m/Y à H:i') }}</p>
+            </div>
+            {% if dossier.status == 'VALIDE' %}
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <i class="fas fa-check-circle mr-2"></i>Validé
+                </span>
+            {% elseif dossier.status == 'REJETE' %}
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                    <i class="fas fa-times-circle mr-2"></i>Rejeté
+                </span>
+            {% else %}
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                    <i class="fas fa-clock mr-2"></i>En attente de validation
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Informations du motard -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h4 class="font-semibold text-gray-900"><i class="fas fa-user text-blue-500 mr-2"></i>Motard</h4>
+            </div>
+            <div class="p-6">
+                {% set motard = dossier.motard %}
+                {% if motard %}
+                <dl class="space-y-3">
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Nom complet</dt>
+                        <dd class="font-medium text-gray-900">{{ motard.nomComplet }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Type</dt>
+                        <dd class="font-medium text-gray-900">{{ motard.type == 'PHYSIQUE' ? 'Personne physique' : 'Personne morale' }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Téléphone</dt>
+                        <dd class="font-medium text-gray-900">{{ motard.telephone|default('-') }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Adresse</dt>
+                        <dd class="font-medium text-gray-900">{{ motard.activeAdresse|default('-') }}</dd>
+                    </div>
+                </dl>
+                {% else %}
+                <p class="text-gray-500">Informations non disponibles</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informations de la moto -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h4 class="font-semibold text-gray-900"><i class="fas fa-motorcycle text-green-500 mr-2"></i>Moto</h4>
+            </div>
+            <div class="p-6">
+                {% set moto = dossier.moto %}
+                {% if moto %}
+                <dl class="space-y-3">
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Marque</dt>
+                        <dd class="font-medium text-gray-900">{{ moto.marque }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Modèle</dt>
+                        <dd class="font-medium text-gray-900">{{ moto.modele|default('-') }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">N° Châssis</dt>
+                        <dd class="font-mono font-medium text-gray-900">{{ moto.numeroChassis }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Couleur</dt>
+                        <dd class="font-medium text-gray-900">{{ moto.couleur|default('-') }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="text-gray-500">Plaque</dt>
+                        <dd>
+                            {% if moto.plaque %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                {{ moto.plaque.numero }}
+                            </span>
+                            {% else %}
+                            <span class="text-yellow-600">Non attribuée</span>
+                            {% endif %}
+                        </dd>
+                    </div>
+                </dl>
+                {% else %}
+                <p class="text-gray-500">Informations non disponibles</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Détail des paiements -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h4 class="font-semibold text-gray-900"><i class="fas fa-receipt text-purple-500 mr-2"></i>Détail des paiements</h4>
+        </div>
+        <div class="p-6">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="text-left py-3 text-sm font-medium text-gray-500">Taxe</th>
+                        <th class="text-right py-3 text-sm font-medium text-gray-500">Montant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paiement in dossier.paiements %}
+                    <tr class="border-b border-gray-100">
+                        <td class="py-3 text-gray-900">{{ paiement.taxe.libelle }}</td>
+                        <td class="py-3 text-right font-medium text-gray-900">{{ paiement.montant|number_format(0, ',', ' ') }} FC</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="bg-gray-50">
+                        <td class="py-4 font-semibold text-gray-900">Total</td>
+                        <td class="py-4 text-right text-xl font-bold text-primary-600">{{ dossier.montantTotal|number_format(0, ',', ' ') }} FC</td>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-sm text-gray-500">
+                    <i class="fas fa-credit-card mr-1"></i>Mode de paiement: 
+                    <span class="font-medium text-gray-900">
+                        {% if dossier.modePaiement == 'CASH' %}Espèces{% elseif dossier.modePaiement == 'MOBILE_MONEY' %}Mobile Money{% else %}Virement{% endif %}
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    {% if dossier.commentaire %}
+    <div class="bg-red-50 rounded-2xl border border-red-200 p-6">
+        <h4 class="font-semibold text-red-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Motif du rejet</h4>
+        <p class="text-red-700">{{ dossier.commentaire }}</p>
+    </div>
+    {% endif %}
+
+    <div class="flex justify-start">
+        <a href="{{ path('encoder_paiement_index') }}" class="inline-flex items-center px-4 py-2 text-gray-600 hover:text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+            <i class="fas fa-arrow-left mr-2"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+{% endblock %}

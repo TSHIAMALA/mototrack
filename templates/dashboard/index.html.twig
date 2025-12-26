@@ -1,0 +1,359 @@
+{% extends 'base.html.twig' %}
+{% block title %}Dashboard - MotoTrack{% endblock %}
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block body %}
+<!-- Stats cards avec liens -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <a href="{{ path('encoder_moto_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-blue-100">Motos</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.motos.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-motorcycle text-2xl text-white"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between text-sm text-blue-100">
+                <span><i class="fas fa-check-circle mr-1"></i>Avec plaque: {{ stats.motos.avecPlaque|default(0) }}</span>
+                <span><i class="fas fa-times-circle mr-1"></i>Sans: {{ stats.motos.sansPlaque|default(0) }}</span>
+            </div>
+        </div>
+    </a>
+
+    <a href="{{ path('encoder_motard_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-emerald-100">Motards</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.motards.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-users text-2xl text-white"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-sm text-emerald-100">
+                <i class="fas fa-user-check mr-1"></i>
+                <span>Personnes physiques: {{ stats.motards.physiques|default(0) }}</span>
+            </div>
+        </div>
+    </a>
+
+    <a href="{{ path('validator_plaques') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-amber-100">Plaques</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.plaques.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-id-card text-2xl text-white"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between text-sm text-amber-100">
+                <span><i class="fas fa-box-open mr-1"></i>Dispo: {{ stats.plaques.disponibles|default(0) }}</span>
+                <span><i class="fas fa-link mr-1"></i>Affectées: {{ stats.plaques.affectees|default(0) }}</span>
+            </div>
+        </div>
+    </a>
+
+    <a href="{{ path('encoder_paiement_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-purple-100">Paiements</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.paiements.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-money-bill-wave text-2xl text-white"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center justify-between text-sm text-purple-100">
+                <span><i class="fas fa-check mr-1"></i>Validés: {{ stats.paiements.valides|default(0) }}</span>
+                <span><i class="fas fa-clock mr-1"></i>Attente: {{ stats.paiements.enAttente|default(0) }}</span>
+            </div>
+        </div>
+    </a>
+</div>
+
+{% if isAdmin %}
+<!-- Admin extra stats -->
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-8">
+    <a href="{{ path('admin_site_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-rose-100">Sites</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.sites.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-map-marker-alt text-2xl text-white"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <a href="{{ path('admin_user_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-cyan-100">Utilisateurs</p>
+                    <p class="text-3xl font-bold text-white mt-1">{{ stats.users.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-3">
+                    <i class="fas fa-user-cog text-2xl text-white"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% endif %}
+
+<!-- Graphiques -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Camembert - Paiements par taxe -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-chart-pie text-purple-500 mr-2"></i>Paiements par type de taxe
+        </h3>
+        <div class="h-64">
+            <canvas id="taxeChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Donut - Statut des plaques -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-chart-pie text-amber-500 mr-2"></i>Répartition des plaques
+        </h3>
+        <div class="h-64">
+            <canvas id="plaqueChart"></canvas>
+        </div>
+    </div>
+
+    {% if isAdmin and chartData.motosBySite|length > 0 %}
+    <!-- Bar chart - Motos par site -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-chart-bar text-blue-500 mr-2"></i>Motos par site
+        </h3>
+        <div class="h-64">
+            <canvas id="siteChart"></canvas>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Statistiques rapides -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+            <i class="fas fa-tachometer-alt text-green-500 mr-2"></i>Indicateurs clés
+        </h3>
+        <div class="space-y-4">
+            <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-hourglass-half text-yellow-600"></i>
+                    </div>
+                    <span class="text-gray-700">Paiements en attente</span>
+                </div>
+                <span class="text-2xl font-bold text-yellow-600">{{ stats.paiements.enAttente|default(0) }}</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-box-open text-blue-600"></i>
+                    </div>
+                    <span class="text-gray-700">Plaques disponibles</span>
+                </div>
+                <span class="text-2xl font-bold text-blue-600">{{ stats.plaques.disponibles|default(0) }}</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-red-50 rounded-xl">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                    <span class="text-gray-700">Motos sans plaque</span>
+                </div>
+                <span class="text-2xl font-bold text-red-600">{{ stats.motos.sansPlaque|default(0) }}</span>
+            </div>
+            <div class="flex items-center justify-between p-4 bg-green-50 rounded-xl">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-coins text-green-600"></i>
+                    </div>
+                    <span class="text-gray-700">Montant total perçu</span>
+                </div>
+                <span class="text-xl font-bold text-green-600">{{ stats.paiements.montantTotal|default(0)|number_format(0, ',', ' ') }} FC</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activités récentes -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-history text-gray-400 mr-2"></i>Dernières affectations
+            </h3>
+            <a href="{{ path('validator_plaques') }}" class="text-sm text-primary-600 hover:text-primary-700">Voir tout →</a>
+        </div>
+        <div class="p-6">
+            {% if recentAffectations|length > 0 %}
+            <div class="space-y-4">
+                {% for affectation in recentAffectations %}
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                            <i class="fas fa-id-card text-primary-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">{{ affectation.plaque.numero|default('N/A') }}</p>
+                            <p class="text-sm text-gray-500">{{ affectation.moto|default('Moto non assignée') }}</p>
+                        </div>
+                    </div>
+                    <span class="text-sm text-gray-500">{{ affectation.validatedAt|date('d/m/Y') }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
+                <p>Aucune affectation récente</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">
+                <i class="fas fa-receipt text-gray-400 mr-2"></i>Derniers paiements
+            </h3>
+            <a href="{{ path('encoder_paiement_index') }}" class="text-sm text-primary-600 hover:text-primary-700">Voir tout →</a>
+        </div>
+        <div class="p-6">
+            {% if recentPaiements|length > 0 %}
+            <div class="space-y-4">
+                {% for paiement in recentPaiements %}
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="h-10 w-10 rounded-full {% if paiement.status == 'VALIDE' %}bg-green-100{% else %}bg-yellow-100{% endif %} flex items-center justify-center">
+                            <i class="fas fa-money-bill {% if paiement.status == 'VALIDE' %}text-green-600{% else %}text-yellow-600{% endif %}"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">{{ paiement.montant|number_format(0, ',', ' ') }} FC</p>
+                            <p class="text-sm text-gray-500">{{ paiement.taxe|default('Taxe') }}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        {% if paiement.status == 'VALIDE' %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Validé</span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">En attente</span>
+                        {% endif %}
+                        <p class="text-xs text-gray-400 mt-1">{{ paiement.createdAt|date('d/m/Y') }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-receipt text-4xl mb-3 text-gray-300"></i>
+                <p>Aucun paiement récent</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Données des graphiques depuis Twig
+const taxeData = {{ chartData.paiementsByTaxe|json_encode|raw }};
+const plaqueData = {{ chartData.plaquesByStatut|json_encode|raw }};
+{% if isAdmin and chartData.motosBySite is defined %}
+const siteData = {{ chartData.motosBySite|json_encode|raw }};
+{% endif %}
+
+// Camembert - Paiements par taxe
+if (taxeData.length > 0) {
+    new Chart(document.getElementById('taxeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: taxeData.map(t => t.libelle || t.code),
+            datasets: [{
+                data: taxeData.map(t => t.total),
+                backgroundColor: ['#8B5CF6', '#EC4899', '#06B6D4', '#10B981', '#F59E0B'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+} else {
+    document.getElementById('taxeChart').parentElement.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><i class="fas fa-chart-pie text-4xl"></i><p class="ml-3">Aucune donnée</p></div>';
+}
+
+// Donut - Statut des plaques
+if (plaqueData.length > 0) {
+    new Chart(document.getElementById('plaqueChart'), {
+        type: 'doughnut',
+        data: {
+            labels: plaqueData.map(p => p.statut === 'DISPONIBLE' ? 'Disponibles' : 'Affectées'),
+            datasets: [{
+                data: plaqueData.map(p => p.total),
+                backgroundColor: ['#10B981', '#3B82F6'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            cutout: '60%'
+        }
+    });
+} else {
+    document.getElementById('plaqueChart').parentElement.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400"><i class="fas fa-chart-pie text-4xl"></i><p class="ml-3">Aucune donnée</p></div>';
+}
+
+{% if isAdmin and chartData.motosBySite is defined %}
+// Bar chart - Motos par site
+if (typeof siteData !== 'undefined' && siteData.length > 0) {
+    new Chart(document.getElementById('siteChart'), {
+        type: 'bar',
+        data: {
+            labels: siteData.map(s => s.nom),
+            datasets: [{
+                label: 'Nombre de motos',
+                data: siteData.map(s => s.total),
+                backgroundColor: '#3B82F6',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+{% endif %}
+</script>
+{% endblock %}
