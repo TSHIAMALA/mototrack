@@ -23,7 +23,8 @@ class DashboardController extends AbstractController
         PaiementRepository $paiementRepository,
         AffectationPlaqueRepository $affectationRepository,
         SiteRepository $siteRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        \App\Repository\DossierRepository $dossierRepository
     ): Response {
         $user = $this->getUser();
         $site = $user->getSite();
@@ -36,6 +37,8 @@ class DashboardController extends AbstractController
             'motards' => $motardRepository->getStatistiques($siteFilter),
             'plaques' => $plaqueRepository->getStatistiques(),
             'paiements' => $paiementRepository->getStatistiques($siteFilter),
+            'dossiers_attente' => $dossierRepository->count(['status' => \App\Entity\Dossier::STATUS_EN_ATTENTE]),
+            'plaques_dispo' => $plaqueRepository->count(['statut' => 'DISPONIBLE']),
         ];
 
         // Données pour les graphiques

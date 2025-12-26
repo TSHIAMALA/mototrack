@@ -3,150 +3,179 @@
 {% block page_title %}Nouveau Motard{% endblock %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-900">Créer un Nouveau Motard</h2>
-        <p class="text-gray-500 mt-1">Enregistrez un nouveau propriétaire de moto</p>
-    </div>
-
-    {{ form_start(form, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate'}}) }}
-    
-    <!-- Section: Informations de base -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <i class="fas fa-info-circle text-blue-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Informations de base</h3>
-            </div>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Type de personne</label>
-                    {{ form_widget(form.type, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Sélectionnez le type de personne</p>
-                    {{ form_errors(form.type) }}
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet <span class="text-red-500">*</span></label>
-                    {{ form_widget(form.nomComplet, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: Jean Mukendi'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Nom complet du motard</p>
-                    {{ form_errors(form.nomComplet) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section: Contact -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
-                    <i class="fas fa-address-book text-green-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Contact & Identification</h3>
-            </div>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">N° Identification</label>
-                    {{ form_widget(form.identification, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: 123456789'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Carte d'identité ou passeport</p>
-                    {{ form_errors(form.identification) }}
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
-                    {{ form_widget(form.telephone, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: +243 812 345 678'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Numéro de téléphone</p>
-                    {{ form_errors(form.telephone) }}
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: jean@email.com'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Adresse email</p>
-                    {{ form_errors(form.email) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section: Adresse -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-amber-100 flex items-center justify-center">
-                    <i class="fas fa-map-marker-alt text-amber-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Adresse</h3>
-            </div>
-            <button type="button" id="add-adresse" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                <i class="fas fa-plus mr-2"></i>Ajouter
-            </button>
-        </div>
-        <div class="p-6">
-            <div id="adresses-container" data-prototype="{{ form_widget(form.adresses.vars.prototype)|e('html_attr') }}" class="space-y-4">
-                {% for adresse in form.adresses %}
-                <div class="adresse-item relative bg-gray-50 rounded-lg p-5 border border-gray-200">
-                    <button type="button" class="remove-adresse absolute top-3 right-3 h-7 w-7 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors">
-                        <i class="fas fa-times text-sm"></i>
-                    </button>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Commune</label>
-                            {{ form_widget(adresse.commune, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors'}}) }}
-                            <p class="mt-1 text-xs text-gray-500">Sélectionnez la commune</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Quartier</label>
-                            {{ form_widget(adresse.quartier, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: Masina'}}) }}
-                            <p class="mt-1 text-xs text-gray-500">Nom du quartier</p>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Avenue</label>
-                            {{ form_widget(adresse.avenue, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: Avenue de la Paix'}}) }}
-                            <p class="mt-1 text-xs text-gray-500">Nom de l'avenue</p>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Numéro</label>
-                            {{ form_widget(adresse.numero, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: 123'}}) }}
-                            <p class="mt-1 text-xs text-gray-500">Numéro de parcelle</p>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 flex items-center gap-2">
-                        {{ form_widget(adresse.isActive, {'attr': {'class': 'h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500'}}) }}
-                        <label class="text-sm text-gray-700">Adresse principale</label>
-                    </div>
-                </div>
-                {% else %}
-                <div id="no-address-msg" class="text-center py-8 text-gray-500">
-                    <i class="fas fa-map-marker-alt text-3xl text-gray-300 mb-2"></i>
-                    <p>Aucune adresse. Cliquez sur "Ajouter" pour ajouter une adresse.</p>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="flex items-center justify-between pt-4">
-        <a href="{{ path('encoder_motard_index') }}" class="text-gray-600 hover:text-gray-900 font-medium">
-            Annuler
-        </a>
-        <button type="submit" class="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-colors">
-            Créer le motard
+{% macro render_adresse(adresse) %}
+    <div class="adresse-item relative bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all hover:border-blue-200 hover:shadow-sm">
+        <button type="button" class="remove-adresse absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors">
+            <i class="fas fa-trash-alt"></i>
         </button>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Commune</label>
+                {{ form_widget(adresse.commune, {'attr': {'class': 'w-full px-4 py-3 bg-white border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors'}}) }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Quartier</label>
+                {{ form_widget(adresse.quartier, {'attr': {'class': 'w-full px-4 py-3 bg-white border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: Masina'}}) }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Avenue</label>
+                {{ form_widget(adresse.avenue, {'attr': {'class': 'w-full px-4 py-3 bg-white border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: Av. de la Paix'}}) }}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Numéro</label>
+                {{ form_widget(adresse.numero, {'attr': {'class': 'w-full px-4 py-3 bg-white border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: 123'}}) }}
+            </div>
+        </div>
+        
+        <div class="mt-4 flex items-center">
+            <div class="mt-4 flex items-center">
+                <input type="checkbox" 
+                       id="{{ adresse.isActive.vars.id }}" 
+                       name="{{ adresse.isActive.vars.full_name }}" 
+                       value="{{ adresse.isActive.vars.value }}" 
+                       {% if adresse.isActive.vars.checked %}checked="checked"{% endif %}
+                       class="w-5 h-5 text-yellow-500 border-gray-300 rounded focus:ring-yellow-500 focus:ring-offset-2 transition-colors cursor-pointer">
+                <label for="{{ adresse.isActive.vars.id }}" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Adresse principale</label>
+            </div>
+        </div>
     </div>
-    
-    {{ form_end(form) }}
+{% endmacro %}
+
+{% import _self as formMacros %}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Sidebar Navigation (Stepper) -->
+        <div class="lg:col-span-3 space-y-6">
+            <div class="sticky top-8">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">Nouveau Motard</h2>
+                    <p class="text-sm text-gray-500">Création d'un compte</p>
+                </div>
+                
+                <nav class="space-y-2" aria-label="Progression">
+                    <a href="#infos-base" class="flex items-center w-full px-4 py-3 text-sm font-medium text-white bg-slate-800 rounded-lg shadow-sm transition-all">
+                        <span class="flex items-center justify-center w-6 h-6 mr-3 text-xs font-bold text-slate-800 bg-white rounded-full">1</span>
+                        Infos de base
+                    </a>
+                    <a href="#contact" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-all">
+                        <span class="flex items-center justify-center w-6 h-6 mr-3 text-xs font-bold text-gray-400 border border-gray-300 rounded-full">2</span>
+                        Contact & ID
+                    </a>
+                    <a href="#adresse" class="flex items-center w-full px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg transition-all">
+                        <span class="flex items-center justify-center w-6 h-6 mr-3 text-xs font-bold text-gray-400 border border-gray-300 rounded-full">3</span>
+                        Adresse
+                    </a>
+                </nav>
+
+                <div class="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <div class="flex items-start">
+                        <i class="fas fa-info-circle text-blue-600 mt-0.5 mr-3"></i>
+                        <p class="text-xs text-blue-700 leading-relaxed">
+                            Assurez-vous d'avoir toutes les pièces d'identité nécessaires avant de commencer l'enregistrement.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Form Content -->
+        <div class="lg:col-span-9">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-gray-900">Enregistrer un motard</h1>
+                    <p class="text-gray-500 mt-1">Remplissez les informations ci-dessous pour créer un nouveau dossier.</p>
+                </div>
+
+                {{ form_start(form, {'attr': {'class': 'space-y-10', 'novalidate': 'novalidate'}}) }}
+                
+                <!-- Section 1: Infos de base -->
+                <section id="infos-base" class="scroll-mt-20">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3 text-sm">01</span>
+                        Informations Personnelles
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type de personne</label>
+                            {{ form_widget(form.type, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors'}}) }}
+                            {{ form_errors(form.type) }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom complet <span class="text-red-500">*</span></label>
+                            {{ form_widget(form.nomComplet, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: Jean Mukendi'}}) }}
+                            {{ form_errors(form.nomComplet) }}
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-100">
+
+                <!-- Section 2: Contact -->
+                <section id="contact" class="scroll-mt-20">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3 text-sm">02</span>
+                        Contact & Identification
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">N° Identification</label>
+                            {{ form_widget(form.identification, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'Numéro de carte d\'identité ou passeport'}}) }}
+                            {{ form_errors(form.identification) }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Téléphone</label>
+                            {{ form_widget(form.telephone, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': '+243...'}}) }}
+                            {{ form_errors(form.telephone) }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'exemple@email.com'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-gray-100">
+
+                <!-- Section 3: Adresse -->
+                <section id="adresse" class="scroll-mt-20">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3 text-sm">03</span>
+                            Adresse
+                        </h3>
+                        <button type="button" id="add-adresse" class="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                            + Ajouter une adresse
+                        </button>
+                    </div>
+                    
+                    <div id="adresses-container" data-prototype="{{ formMacros.render_adresse(form.adresses.vars.prototype)|e('html_attr') }}" class="space-y-4">
+                        {% for adresse in form.adresses %}
+                            {{ formMacros.render_adresse(adresse) }}
+                        {% else %}
+                        <div id="no-address-msg" class="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                            <p class="text-gray-500 text-sm">Aucune adresse enregistrée.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100">
+                    <a href="{{ path('encoder_motard_index') }}" class="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                        Annuler
+                    </a>
+                    <button type="submit" class="px-8 py-3 text-sm font-bold text-white bg-yellow-500 rounded-xl hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-200 transition-all shadow-sm hover:shadow-md">
+                        Créer le motard
+                    </button>
+                </div>
+                
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

@@ -4,111 +4,140 @@
 
 {% block body %}
 <!-- Stats cards avec liens -->
-<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+<!-- Stats cards avec liens -->
+<!-- Stats cards avec liens -->
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">
+    <!-- Row 1: Motos, Motards, Plaques, Paiements -->
     <a href="{{ path('encoder_moto_index') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-blue-100">Motos</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.motos.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-blue-100">Motos</p>
+                    <p class="text-xl font-bold text-white">{{ stats.motos.total|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-motorcycle text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-motorcycle text-base text-white"></i>
                 </div>
             </div>
-            <div class="mt-4 flex items-center justify-between text-sm text-blue-100">
-                <span><i class="fas fa-check-circle mr-1"></i>Avec plaque: {{ stats.motos.avecPlaque|default(0) }}</span>
+            <div class="mt-1 flex items-center justify-between text-[10px] text-blue-100">
+                <span><i class="fas fa-check-circle mr-1"></i>Plaque: {{ stats.motos.avecPlaque|default(0) }}</span>
                 <span><i class="fas fa-times-circle mr-1"></i>Sans: {{ stats.motos.sansPlaque|default(0) }}</span>
             </div>
         </div>
     </a>
 
     <a href="{{ path('encoder_motard_index') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-emerald-100">Motards</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.motards.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-emerald-100">Motards</p>
+                    <p class="text-xl font-bold text-white">{{ stats.motards.total|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-users text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-users text-base text-white"></i>
                 </div>
             </div>
-            <div class="mt-4 flex items-center text-sm text-emerald-100">
+            <div class="mt-1 flex items-center text-[10px] text-emerald-100">
                 <i class="fas fa-user-check mr-1"></i>
-                <span>Personnes physiques: {{ stats.motards.physiques|default(0) }}</span>
+                <span>Phys: {{ stats.motards.physiques|default(0) }}</span>
             </div>
         </div>
     </a>
 
     <a href="{{ path('validator_plaques') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-amber-100">Plaques</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.plaques.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-amber-100">Plaques</p>
+                    <p class="text-xl font-bold text-white">{{ stats.plaques.total|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-id-card text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-id-card text-base text-white"></i>
                 </div>
             </div>
-            <div class="mt-4 flex items-center justify-between text-sm text-amber-100">
-                <span><i class="fas fa-box-open mr-1"></i>Dispo: {{ stats.plaques.disponibles|default(0) }}</span>
-                <span><i class="fas fa-link mr-1"></i>Affectées: {{ stats.plaques.affectees|default(0) }}</span>
+            <div class="mt-1 flex items-center justify-between text-[10px] text-amber-100">
+                <span><i class="fas fa-box-open mr-1"></i>Dispo: {{ stats.plaques_dispo|default(0) }}</span>
+                <span><i class="fas fa-link mr-1"></i>Aff: {{ stats.plaques.affectees|default(0) }}</span>
             </div>
         </div>
     </a>
 
     <a href="{{ path('encoder_paiement_index') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-purple-100">Paiements</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.paiements.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-purple-100">Paiements</p>
+                    <p class="text-xl font-bold text-white">{{ stats.paiements.total|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-money-bill-wave text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-money-bill-wave text-base text-white"></i>
                 </div>
             </div>
-            <div class="mt-4 flex items-center justify-between text-sm text-purple-100">
-                <span><i class="fas fa-check mr-1"></i>Validés: {{ stats.paiements.valides|default(0) }}</span>
-                <span><i class="fas fa-clock mr-1"></i>Attente: {{ stats.paiements.enAttente|default(0) }}</span>
+            <div class="mt-1 flex items-center justify-between text-[10px] text-purple-100">
+                <span><i class="fas fa-check mr-1"></i>OK: {{ stats.paiements.valides|default(0) }}</span>
+                <span><i class="fas fa-clock mr-1"></i>Wait: {{ stats.paiements.enAttente|default(0) }}</span>
             </div>
         </div>
     </a>
 </div>
 
-{% if isAdmin %}
-<!-- Admin extra stats -->
-<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-8">
-    <a href="{{ path('admin_site_index') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 mb-4">
+    <!-- Row 2: Dossiers, Sites (Admin), Users (Admin) -->
+    <a href="{{ path('validator_paiements') }}" class="block group">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-rose-100">Sites</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.sites.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-rose-100">À valider</p>
+                    <p class="text-xl font-bold text-white">{{ stats.dossiers_attente|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-map-marker-alt text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-file-signature text-base text-white"></i>
                 </div>
+            </div>
+            <div class="mt-1 flex items-center text-[10px] text-rose-100">
+                <i class="fas fa-info-circle mr-1"></i>
+                <span>Action requise</span>
+            </div>
+        </div>
+    </a>
+
+    {% if isAdmin %}
+    <a href="{{ path('admin_site_index') }}" class="block group">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-cyan-100">Sites</p>
+                    <p class="text-xl font-bold text-white">{{ stats.sites.total|default(0) }}</p>
+                </div>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-map-marker-alt text-base text-white"></i>
+                </div>
+            </div>
+            <div class="mt-1 flex items-center text-[10px] text-cyan-100">
+                <i class="fas fa-globe mr-1"></i>
+                <span>Total enregistrés</span>
             </div>
         </div>
     </a>
     <a href="{{ path('admin_user_index') }}" class="block group">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-500 to-cyan-600 p-6 shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+        <div class="relative overflow-hidden rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 p-3 shadow group-hover:shadow-md transition-all group-hover:scale-105">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-cyan-100">Utilisateurs</p>
-                    <p class="text-3xl font-bold text-white mt-1">{{ stats.users.total|default(0) }}</p>
+                    <p class="text-xs font-medium text-indigo-100">Utilisateurs</p>
+                    <p class="text-xl font-bold text-white">{{ stats.users.total|default(0) }}</p>
                 </div>
-                <div class="rounded-full bg-white/20 p-3">
-                    <i class="fas fa-user-cog text-2xl text-white"></i>
+                <div class="rounded-full bg-white/20 p-1.5">
+                    <i class="fas fa-user-cog text-base text-white"></i>
                 </div>
+            </div>
+            <div class="mt-1 flex items-center text-[10px] text-indigo-100">
+                <i class="fas fa-shield-alt mr-1"></i>
+                <span>Accès système</span>
             </div>
         </div>
     </a>
+    {% endif %}
 </div>
-{% endif %}
 
 <!-- Graphiques -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

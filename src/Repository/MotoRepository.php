@@ -71,29 +71,17 @@ class MotoRepository extends ServiceEntityRepository
 
     public function findEligibleForPlaque(Site $site): array
     {
-        // Motos sans plaque avec tous les paiements validés
-        $conn = $this->getEntityManager()->getConnection();
-        
-        $sql = "SELECT m.* FROM moto m
-                LEFT JOIN affectation_plaque ap ON ap.moto_id = m.id
-                WHERE ap.id IS NULL
-                AND m.site_id = :site_id
-                AND (
-                    SELECT COUNT(DISTINCT p.taxe_id) 
-                    FROM paiement p 
-                    WHERE p.moto_id = m.id AND p.status = 'VALIDE'
-                ) = 3
-                ORDER BY m.created_at DESC";
-        
-        $stmt = $conn->executeQuery($sql, ['site_id' => $site->getId()]);
-        $results = $stmt->fetchAllAssociative();
-        
-        $motos = [];
-        foreach ($results as $row) {
-            $motos[] = $this->find($row['id']);
-        }
-        
-        return $motos;
+        return $this->createQueryBuilder('m')
+            ->innerJoin('App\Entity\Dossier', 'd', 'WITH', 'd.moto = m')
+            ->leftJoin('m.affectationPlaque', 'ap')
+            ->andWhere('ap.id IS NULL')
+            ->andWhere('m.site = :site')
+            ->andWhere('d.status = :status')
+            ->setParameter('site', $site)
+            ->setParameter('status', \App\Entity\Dossier::STATUS_VALIDE)
+            ->orderBy('m.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function getStatistiques(?Site $site = null): array

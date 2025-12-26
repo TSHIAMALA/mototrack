@@ -71,10 +71,16 @@ class ValidationController extends AbstractController
     {
         $user = $this->getUser();
         
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $motos = $motoRepository->findWithoutPlaque();
+        // On utilise toujours la méthode sécurisée qui vérifie le dossier validé
+        // Si admin, on pourrait vouloir voir tout, mais pour l'affectation, restons stricts
+        $site = $user->getSite();
+        
+        if ($this->isGranted('ROLE_ADMIN') && !$site) {
+             // Cas limite pour l'admin global sans site, à gérer si besoin
+             // Pour l'instant on retourne vide ou on force la sélection d'un site
+             $motos = []; 
         } else {
-            $motos = $motoRepository->findWithoutPlaque($user->getSite());
+            $motos = $motoRepository->findEligibleForPlaque($site);
         }
         
         $plaquesDisponibles = $plaqueRepository->findDisponibles();
@@ -86,11 +92,20 @@ class ValidationController extends AbstractController
     }
 
     #[Route('/plaque/{id}/affecter', name: 'validator_plaque_affecter', methods: ['POST'])]
-    public function affecterPlaque(Request $request, Moto $moto, PlaqueRepository $plaqueRepository, EntityManagerInterface $em): Response
+    public function affecterPlaque(Request $request, Moto $moto, PlaqueRepository $plaqueRepository, EntityManagerInterface $em, DossierRepository $dossierRepository): Response
     {
         $plaqueId = $request->request->get('plaque_id');
         
         if ($this->isCsrfTokenValid('affecter'.$moto->getId(), $request->request->get('_token')) && $plaqueId) {
+            
+            // VERIFICATION DE SECURITE SUPPLEMENTAIRE
+            $dossier = $dossierRepository->findOneBy(['moto' => $moto, 'status' => Dossier::STATUS_VALIDE]);
+            
+            if (!$dossier) {
+                $this->addFlash('danger', 'Impossible d\'affecter une plaque : Aucun dossier validé trouvé pour cette moto.');
+                return $this->redirectToRoute('validator_plaques');
+            }
+
             $plaque = $plaqueRepository->find($plaqueId);
             if ($plaque && $plaque->getStatut() === 'DISPONIBLE') {
                 $affectation = new \App\Entity\AffectationPlaque();

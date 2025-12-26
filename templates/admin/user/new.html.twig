@@ -3,109 +3,106 @@
 {% block page_title %}Nouvel Utilisateur{% endblock %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="mb-6">
-        <h2 class="text-2xl font-bold text-gray-900">Créer un Nouvel Utilisateur</h2>
-        <p class="text-gray-500 mt-1">Ajoutez un nouvel utilisateur au système</p>
-    </div>
-
-    {{ form_start(form, {'attr': {'class': 'space-y-6', 'novalidate': 'novalidate'}}) }}
-    
-    <!-- Section: Informations personnelles -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <i class="fas fa-user text-blue-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Informations personnelles</h3>
-            </div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Nouvel Utilisateur</h1>
+            <p class="text-gray-500 mt-1">Ajoutez un nouvel utilisateur au système</p>
         </div>
-        <div class="p-6">
+
+        {{ form_start(form, {'attr': {'class': 'space-y-8', 'novalidate': 'novalidate'}}) }}
+        
+        <!-- Section: Informations personnelles -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mr-3 text-sm"><i class="fas fa-user"></i></span>
+                Informations personnelles
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom complet <span class="text-red-500">*</span></label>
-                    {{ form_widget(form.nom, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: Jean Mukendi'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Nom complet de l'utilisateur</p>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nom complet <span class="text-red-500">*</span></label>
+                    {{ form_widget(form.nom, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: Jean Mukendi'}}) }}
                     {{ form_errors(form.nom) }}
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
-                    {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': 'ex: jean@mototrack.com'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Adresse email (utilisée pour la connexion)</p>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email <span class="text-red-500">*</span></label>
+                    {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': 'ex: jean@mototrack.com'}}) }}
                     {{ form_errors(form.email) }}
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Section: Sécurité -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-red-100 flex items-center justify-center">
-                    <i class="fas fa-lock text-red-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Sécurité</h3>
-            </div>
-        </div>
-        <div class="p-6">
+        <hr class="border-gray-100">
+
+        <!-- Section: Sécurité -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                <span class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center mr-3 text-sm"><i class="fas fa-lock"></i></span>
+                Sécurité
+            </h3>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mot de passe <span class="text-red-500">*</span></label>
-                {{ form_widget(form.plainPassword, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors', 'placeholder': '••••••••'}}) }}
-                <p class="mt-1 text-xs text-gray-500">Minimum 6 caractères</p>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe <span class="text-red-500">*</span></label>
+                {{ form_widget(form.plainPassword, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors', 'placeholder': '••••••••'}}) }}
+                <p class="mt-2 text-xs text-gray-500">Minimum 6 caractères</p>
                 {{ form_errors(form.plainPassword) }}
             </div>
         </div>
-    </div>
 
-    <!-- Section: Rôle et Site -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                <div class="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                    <i class="fas fa-user-tag text-purple-600"></i>
-                </div>
-                <h3 class="font-semibold text-gray-900">Rôle et Affectation</h3>
-            </div>
-        </div>
-        <div class="p-6">
+        <hr class="border-gray-100">
+
+        <!-- Section: Rôle et Site -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+                <span class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mr-3 text-sm"><i class="fas fa-user-tag"></i></span>
+                Rôle et Affectation
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Rôle <span class="text-red-500">*</span></label>
-                    {{ form_widget(form.roles, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Sélectionnez le rôle de l'utilisateur</p>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Rôle <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {% for child in form.roles %}
+                        <label class="relative flex items-center p-4 cursor-pointer bg-gray-50 border border-gray-200 rounded-xl hover:bg-white hover:border-yellow-400 transition-all group">
+                            <div class="flex items-center h-5">
+                                {{ form_widget(child, {'attr': {'class': 'h-4 w-4 text-yellow-500 border-gray-300 rounded focus:ring-yellow-400'}}) }}
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-medium text-gray-900 group-hover:text-yellow-700">{{ child.vars.label }}</span>
+                            </div>
+                        </label>
+                        {% endfor %}
+                    </div>
                     {{ form_errors(form.roles) }}
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Site <span class="text-red-500">*</span></label>
-                    {{ form_widget(form.site, {'attr': {'class': 'w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors'}}) }}
-                    <p class="mt-1 text-xs text-gray-500">Site d'affectation</p>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Site <span class="text-red-500">*</span></label>
+                    {{ form_widget(form.site, {'attr': {'class': 'w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-colors'}}) }}
                     {{ form_errors(form.site) }}
                 </div>
             </div>
             
             <div class="mt-6">
-                <div class="flex items-center gap-2">
-                    {{ form_widget(form.isActive, {'attr': {'class': 'h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500'}}) }}
-                    <label class="text-sm font-medium text-gray-700">Compte actif</label>
-                </div>
-                <p class="mt-1 text-xs text-gray-500 ml-6">L'utilisateur pourra se connecter si le compte est actif</p>
+                <label class="inline-flex items-center cursor-pointer group">
+                    <div class="relative">
+                        {{ form_widget(form.isActive, {'attr': {'class': 'peer sr-only'}}) }}
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-400"></div>
+                    </div>
+                    <span class="ml-3 text-sm font-medium text-gray-700 group-hover:text-gray-900">Compte actif</span>
+                </label>
+                <p class="mt-1 text-xs text-gray-500 ml-14">L'utilisateur pourra se connecter si le compte est actif</p>
             </div>
         </div>
-    </div>
 
-    <!-- Actions -->
-    <div class="flex items-center justify-between pt-4">
-        <a href="{{ path('admin_user_index') }}" class="text-gray-600 hover:text-gray-900 font-medium">
-            Annuler
-        </a>
-        <button type="submit" class="inline-flex items-center px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-colors">
-            Créer l'utilisateur
-        </button>
+        <!-- Actions -->
+        <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100">
+            <a href="{{ path('admin_user_index') }}" class="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                Annuler
+            </a>
+            <button type="submit" class="px-8 py-3 text-sm font-bold text-white bg-yellow-500 rounded-xl hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-200 transition-all shadow-sm hover:shadow-md">
+                Créer l'utilisateur
+            </button>
+        </div>
+        
+        {{ form_end(form) }}
     </div>
-    
-    {{ form_end(form) }}
 </div>
 {% endblock %}
